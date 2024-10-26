@@ -37,7 +37,7 @@ For Hardware:
 ### Implementation
 For Software:
 # Installation
-[commands]
+No installation is required as all our files are HTML so just downloading them and putting together in a folder will do the trick.
 
 # Run
 [commands]
