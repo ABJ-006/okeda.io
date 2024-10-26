@@ -62,14 +62,14 @@ This screenshot shows our second option in the menu which shows useless tips
 
 ### Project Demo
 # Video
-[[Add your demo video link here]](https://drive.google.com/file/d/1s9W8thdRFCzy7bVJbsPvKR7l2kZGw4Ur/view?usp=drive_link)
+https://drive.google.com/file/d/1s9W8thdRFCzy7bVJbsPvKR7l2kZGw4Ur/view?usp=drive_link
 
 
 
 ## Team Contributions
 - Ahmed Bin Jassim: Idea and Creativity
 - Najwan Razi: Codes and Fixes
-- [Name 3]: Games
+- Minhaj K.V: Games
 
 ---
 Made with ❤️ at TinkerHub Useless Projects 
