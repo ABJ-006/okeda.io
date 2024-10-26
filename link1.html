@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fun Zone Homepage</title>
+    <style>
+        /* Main styling */
+        body {
+            margin: 0;
+            font-family: 'Times New Roman', serif;
+            color: #333;
+            background: #f7f8fc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .main-container, .container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 90%;
+            margin: auto;
+        }
+
+        h1 {
+            color: #ff6f61;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+	
+        button {
+            padding: 15px 30px;
+            font-size: 1.2em;
+            color: #ffffff;
+            background-color: #ff6f61;
+            border-radius: 6px;
+            transition: background-color 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #e65c50;
+        }
+
+        #tip {
+            font-size: 1.5em;
+            color: #8e44ad;
+            margin: 20px 0;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        footer {
+            margin-top: 30px;
+            font-size: 0.9em;
+            color: #777;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="home" class="main-container">
+        <h1>Welcome to the Fun Zone!</h1>
+        <p>Choose an option below to start having fun!</p>
+        
+        <div class="button-group">
+            <button onclick="showFeelGoodZone()">Feel-Good Fun Zone</button>
+            <button onclick="showRandomTips()">Random Useless Tips</button>
+            <button onclick="showFunGames()">Fun Games</button>
+        </div>
+    </div>
+
+    <div id="feelGoodZone" class="container hidden">
+        <h1>Welcome to the Feel-Good Fun Zone!</h1>
+        <input type="text" id="userName" placeholder="Enter your name here" oninput="updateGreeting()" />
+        <p id="message">You're amazing just the way you are!</p>
+        <p id="greeting"></p>
+        <div class="button-group">
+            <button onclick="generateCompliment()">Give Me a Compliment</button>
+            <button onclick="generateInsult()">Give Me a Joke Insult</button>
+            <button onclick="generateDietSuggestion()">Funny Diet Suggestion</button>
+            <button onclick="showHome()">Back to Home </button>
+        </div>
+    </div>
+
+    <div id="randomTips" class="container hidden">
+        <h1>Random Useless Tips</h1>
+        <div id="tip">Click the button to get a useless tip!</div>
+        <button id="randomButton">Get a Useless Tip!</button>
+        <button onclick="showHome()">Back to Home</button>
+    </div>
+
+    <div id="funGames" class="container hidden">
+        <h1>Fun Games</h1>
+        <div class="button-group">
+            <button onclick="window.location.href='clickme5.html'">Click me!</button>
+            <button onclick="window.location.href='colorswitch.html'">Colour Switch</button>
+            <button onclick="showHome()">Back to Home</button>
+        </div>
+    </div>
+
+    <script>
+        // JavaScript for Feel-Good Fun Zone
+        const compliments = ["You're amazing!", "You're a rockstar!", "Keep shining bright!","Your positivity is contagious!",
+"You have a remarkable ability to make people feel comfortable.",
+"Your creativity is truly inspiring.",
+"You have an incredible sense of style!",
+"Your hard work and dedication really shine through.",
+"You have a great sense of humor; you always know how to make me smile.",
+"Your kindness makes the world a better place.",
+"You have a unique perspective that always brings something new to the table.",
+"Your intelligence is impressive; you always know just what to say.",
+"You light up the room with your presence."];
+        const insults = ["You're like a cloudy day.", "You're as sharp as a marble!", "You're as useful as a screen door on a submarine!","You're like a software update—whenever I see you, I think, "Not now."",
+"If you were any more basic, you'd be a default setting.",
+"You're proof that even evolution makes mistakes.",
+"I’d explain it to you, but I left my English-to-Dingbat dictionary at home.",
+"You're the reason God created the middle finger.",
+"You're like a cloud; when you disappear, it's a beautiful day.",
+"If you had a penny for every time you said something smart, you’d be broke.",
+"You're like a candle in the wind—useless and annoying.",
+"I'd agree with you, but then we'd both be wrong.",
+"You bring everyone so much joy when you leave the room.",];
+        const dietSuggestions = ["The Pizza Diet!", "The Chocolate Diet!", "Only Ice Cream Diet!","The Cookie Diet","The Cookie Diet"];
+        
+        function getUserName() {
+            const userName = document.getElementById("userName").value;
+            return userName ? userName : "Friend";
+        }
+
+        function updateGreeting() {
+            const userName = getUserName();
+            document.getElementById("greeting").innerText = `Hello, ${userName}!`;
+        }
+
+        function generateCompliment() {
+            const randomIndex = Math.floor(Math.random() * compliments.length);
+            document.getElementById("message").innerText = `${getUserName()}, ${compliments[randomIndex]}`;
+        }
+
+        function generateInsult() {
+            const randomIndex = Math.floor(Math.random() * insults.length);
+            document.getElementById("message").innerText = `${getUserName()}, ${insults[randomIndex]}`;
+        }
+
+        function generateDietSuggestion() {
+            const randomIndex = Math.floor(Math.random() * dietSuggestions.length);
+            document.getElementById("message").innerText = `${getUserName()}, ${dietSuggestions[randomIndex]}`;
+        }
+
+        // JavaScript for Random Useless Tips
+        const uselessTips = ["Use a spoon to eat soup.", "Water is wet.", "Sky is blue.","Fire is hot","Ice Cream Melts","You can't drink sand"];
+        
+        document.getElementById("randomButton").addEventListener("click", () => {
+            const randomIndex = Math.floor(Math.random() * uselessTips.length);
+            const tipElement = document.getElementById("tip");
+            tipElement.innerText = uselessTips[randomIndex];
+        });
+
+        // JavaScript for Fun Games
+        function clickMe() {
+            alert("You clicked me!");
+        }
+
+        function toggleColor() {
+            document.body.style.backgroundColor = document.body.style.backgroundColor === "yellow" ? "#f7f8fc" : "yellow";
+        }
+
+        // Section toggling functions
+        function showFeelGoodZone() {
+            document.getElementById("home").classList.add("hidden");
+            document.getElementById("feelGoodZone").classList.remove("hidden");
+        }
+
+        function showRandomTips() {
+            document.getElementById("home").classList.add("hidden");
+            document.getElementById("randomTips").classList.remove("hidden");
+        }
+
+        function showFunGames() {
+            document.getElementById("home").classList.add("hidden");
+            document.getElementById("funGames").classList.remove("hidden");
+        }
+
+        function showHome() {
+            document.getElementById("feelGoodZone").classList.add("hidden");
+            document.getElementById("randomTips").classList.add("hidden");
+            document.getElementById("funGames").classList.add("hidden");
+            document.getElementById("home").classList.remove("hidden");
+        }
+    </script>
+</body>
+</html>

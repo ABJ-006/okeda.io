@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Useless Project Challenge</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(to right, #1a1a1a, #4d4d4d); /* Gradient background */
+            color: #00ff00; /* Green text for a techy feel */
+            font-family: 'Courier New', monospace; /* Monospace font */
+            overflow: hidden; /* Hide overflow for a cleaner look */
+            transition: background-color 0.3s;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 3em;
+        }
+
+        #loginContainer {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1); /* Semi-transparent background */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            position: relative; /* Positioning for absolute elements */
+            transition: transform 0.3s;
+            width: 100%; /* Make it full width */
+            height: 100%; /* Make it full height */
+        }
+
+        input[type="text"], input[type="submit"] {
+            padding: 10px;
+            margin: 10px;
+            border-radius: 5px;
+            border: 1px solid #00ff00; /* Green border */
+            background: rgba(0, 0, 0, 0.5); /* Dark background for input */
+            color: #00ff00; /* Green text */
+            transition: border-color 0.3s, background-color 0.3s;
+            font-size: 1.1em;
+        }
+
+        input[type="text"]:focus {
+            border-color: #ff3333; /* Change border on focus */
+        }
+
+        input[type="submit"] {
+            cursor: pointer;
+            background-color: #00ff00; /* Green button */
+            color: #000; /* Black text for button */
+            border: none;
+            transition: background-color 0.3s;
+            font-size: 1.1em;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #00cc00; /* Darker green on hover */
+        }
+
+        #message {
+            margin-top: 20px;
+            font-size: 1.5em;
+            color: #ff6347; /* Red color for messages */
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Move animation */
+        @keyframes moveAround {
+            0% { transform: translate(0, 0); }
+            10% { transform: translate(50px, 20px); }
+            20% { transform: translate(-30px, -40px); }
+            30% { transform: translate(20px, 30px); }
+            40% { transform: translate(-50px, -10px); }
+            50% { transform: translate(30px, 20px); }
+            60% { transform: translate(-20px, -30px); }
+            70% { transform: translate(40px, 10px); }
+            80% { transform: translate(-30px, 50px); }
+            90% { transform: translate(20px, -20px); }
+            100% { transform: translate(0, 0); }
+        }
+
+        #inputBox {
+            animation: moveAround 1s infinite;
+        }
+
+        /* Hacking effect */
+        #hackingEffect {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            color: #ff0000;
+            display: none; /* Initially hidden */
+            font-size: 1.5em;
+            padding: 20px;
+            text-align: center;
+            overflow-y: auto; /* Allow scrolling */
+        }
+
+        /* Syntax Error Window */
+        #errorWindow {
+            display: none; /* Initially hidden */
+            position: absolute;
+            top: 20%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            max-width: 600px;
+            background: #ffffff;
+            color: #000000;
+            border: 2px solid #ff0000;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            padding: 20px;
+            text-align: center;
+            font-size: 1.2em;
+            border-radius: 10px;
+        }
+
+        #errorMessage {
+            margin: 20px 0;
+        }
+
+        #closeButton {
+            background: #ff0000;
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 1.1em;
+            transition: background 0.3s;
+        }
+
+        #closeButton:hover {
+            background: #cc0000;
+        }
+
+        #gameOverMessage {
+            display: none; /* Initially hidden */
+            margin-top: 20px;
+            font-size: 1.5em;
+            color: #ff6347; /* Red color for Game Over message */
+        }
+
+        /* Scary interface */
+        #scaryInterface {
+            display: none; /* Initially hidden */
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.9);
+            color: #ff0000;
+            text-align: center;
+            font-size: 2em;
+            padding: 50px;
+            z-index: 2000; /* Ensure it's above other elements */
+        }
+
+        #scaryImage {
+            max-width: 80%; /* Responsive image */
+            max-height: 80%;
+            border: 5px solid #ff0000; /* Red border for image */
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="loginContainer">
+        <h1>Useless Project Challenge</h1>
+        <div id="inputBox">
+            <input type="text" id="username" placeholder="Enter your name" />
+            <input type="submit" id="submitBtn" value="Submit" />
+        </div>
+        <div id="message" class="hidden"></div>
+        <div id="gameOverMessage" class="hidden">Game Over! Thanks for playing!</div>
+    </div>
+
+    <!-- Hacking effect overlay -->
+    <div id="hackingEffect">
+        <h1>Hacking in Progress...</h1>
+        <p>Accessing system files...</p>
+        <p>Decrypting data...</p>
+        <p>Bypassing security protocols...</p>
+        <p>WARNING: Unauthorized access detected!</p>
+        <p>System will reboot in <span id="countdown">10</span> seconds...</p>
+        <button id="closeHackingButton">Close</button>
+    </div>
+
+    <!-- Syntax Error Window -->
+    <div id="errorWindow">
+        <h1>Windows Syntax Error</h1>
+        <div id="errorMessage">Error: The system has encountered an unexpected error.</div>
+        <button id="closeButton">Close</button>
+    </div>
+
+    <!-- Scary interface -->
+    <div id="scaryInterface">
+        <h1>System Breach Detected!</h1>
+        <p>Your system is compromised!</p>
+        <video controls autoplay loop src="C:\Users\hp\OneDrive\Desktop\Tinker/Rick Roll.mp4">
+        <p>Shutting down in <span id="shutdownTimer">5</span> seconds...</p>
+    </div>
+
+    <script>
+        let level = 1;
+
+        document.getElementById('submitBtn').addEventListener('click', (e) => {
+            e.preventDefault(); // Prevent default form submission
+            moveInput();
+        });
+
+        function moveInput() {
+            const inputBox = document.getElementById('inputBox');
+
+            // Calculate maximum x and y position for the viewport
+            const maxX = window.innerWidth - inputBox.clientWidth - 20; // 20px margin
+            const maxY = window.innerHeight - inputBox.clientHeight - 20; // 20px margin
+
+            // Randomize position within the viewport
+            const x = Math.floor(Math.random() * maxX);
+            const y = Math.floor(Math.random() * maxY);
+
+            inputBox.style.position = 'absolute';
+            inputBox.style.left = x + 'px';
+            inputBox.style.top = y + 'px';
+
+            level++;
+
+            if (level > 15) {
+                showScaryInterface();
+            } else {
+                if (level % 5 === 0) {
+                    alert(`Congrats! You completed level ${level - 1}!`);
+                }
+            }
+        }
+
+        function showHackingEffect() {
+            const hackingEffect = document.getElementById('hackingEffect');
+            hackingEffect.style.display = 'block'; // Show hacking overlay
+
+            // Countdown timer for 10 seconds
+            let countdown = 10;
+            const countdownElement = document.getElementById('countdown');
+            const timer = setInterval(() => {
+                countdown--;
+                countdownElement.innerText = countdown;
+
+                if (countdown <= 0) {
+                    clearInterval(timer);
+                    showErrorWindow(); // Show syntax error window
+                    hackingEffect.style.display = 'none'; // Hide the hacking effect
+                }
+            }, 1000);
+        }
+
+        function showErrorWindow() {
+            const errorWindow = document.getElementById('errorWindow');
+            errorWindow.style.display = 'block'; // Show syntax error window
+            const errorMessage = document.getElementById('errorMessage');
+            errorMessage.innerHTML += "<br>Attempting to overload the system...";
+
+            // Create multiple error messages to simulate overload
+            for (let i = 0; i < 20; i++) {
+                setTimeout(() => {
+                    errorMessage.innerHTML += "<br>Error: System overload detected!";
+                }, i * 500); // Show new error every half second
+            }
+        }
+
+        function showScaryInterface() {
+            const scaryInterface = document.getElementById('scaryInterface');
+            scaryInterface.style.display = 'block'; // Show scary interface
+
+            // Countdown for shutdown
+            let countdown = 5;
+            const shutdownTimer = document.getElementById('shutdownTimer');
+            const timer = setInterval(() => {
+                countdown--;
+                shutdownTimer.innerText = countdown;
+
+                if (countdown <= 0) {
+                    clearInterval(timer);
+                    alert("Your system has been shut down!");
+                    scaryInterface.style.display = 'none'; // Hide scary interface
+                    document.getElementById('gameOverMessage').classList.remove('hidden'); // Show game over message
+                }
+            }, 1000);
+        }
+
+        document.getElementById('closeButton').addEventListener('click', () => {
+            const errorWindow = document.getElementById('errorWindow');
+            errorWindow.style.display = 'none'; // Close the error window
+        });
+
+        document.getElementById('closeHackingButton').addEventListener('click', () => {
+            const hackingEffect = document.getElementById('hackingEffect');
+            hackingEffect.style.display = 'none'; // Close the hacking effect
+        });
+    </script>
+</body>
+</html>

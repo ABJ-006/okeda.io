@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Color Switching Game</title>
+    <style>
+        body {
+            margin: 0;
+            background-color: #282c34;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+            font-family: 'Arial', sans-serif;
+            color: #fff;
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 15px;
+            font-size: 2rem;
+            letter-spacing: 1px;
+        }
+
+        #nameEntry {
+            margin-bottom: 20px;
+        }
+
+        #instructions {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            font-weight: bold;
+            display: none; /* Hide instructions until the game starts */
+        }
+
+        #timer {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            font-weight: bold;
+            color: #ff4500; /* Timer color */
+            display: none; /* Hide timer until the game starts */
+        }
+
+        #ballsContainer {
+            display: flex;
+            justify-content: center;
+            gap: 15px; /* Space between balls */
+            margin-bottom: 20px;
+            display: none; /* Hide balls until the game starts */
+        }
+
+        .ball {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            transition: transform 0.2s, box-shadow 0.3s;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .ball:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.7);
+        }
+
+        #score, #highScore {
+            font-size: 1.5rem;
+            margin: 10px 0;
+            display: none; /* Hide score until the game starts */
+        }
+
+        #leaderboard {
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 5px;
+            background-color: #ff4500;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        button:hover {
+            background-color: #ff6347;
+            transform: translateY(-2px);
+        }
+
+        button:focus {
+            outline: none;
+        }
+
+        input {
+            padding: 10px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            width: 200px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Color Switching Game</h1>
+
+<div id="nameEntry">
+    <input type="text" id="playerName" placeholder="Enter your name" />
+    <button id="startGameButton">Start Game</button>
+</div>
+
+<div id="instructions">Select: <span id="colorInstruction">Red</span></div>
+<div id="timer">Time Left: <span id="timeLeft">2.00</span> seconds</div>
+<div id="ballsContainer">
+    <div class="ball" id="ball1"></div>
+    <div class="ball" id="ball2"></div>
+    <div class="ball" id="ball3"></div>
+    <div class="ball" id="ball4"></div>
+    <div class="ball" id="ball5"></div>
+    <div class="ball" id="ball6"></div>
+</div>
+<div id="score">Score: 0</div>
+<div id="highScore">High Score: 0</div>
+<button id="resetLeaderboardButton">Reset Leaderboard</button>
+<div id="leaderboard"></div>
+<button id="restartButton">Restart Game</button>
+
+<script>
+    const nameEntry = document.getElementById("nameEntry");
+    const instructionsElement = document.getElementById("colorInstruction");
+    const timerElement = document.getElementById("timeLeft");
+    const balls = document.querySelectorAll(".ball");
+    const scoreElement = document.getElementById("score");
+    const highScoreElement = document.getElementById("highScore");
+    const playerNameInput = document.getElementById("playerName");
+    const resetLeaderboardButton = document.getElementById("resetLeaderboardButton");
+    const leaderboardElement = document.getElementById("leaderboard");
+    const restartButton = document.getElementById("restartButton");
+    const instructions = document.getElementById("instructions");
+    const timer = document.getElementById("timer");
+    const ballsContainer = document.getElementById("ballsContainer");
+
+    let score = 0;
+    let highScore = 0; // Initialize high score
+    let currentColor;
+    let timeLeft = 2000; // Set time to 2 seconds in milliseconds
+    let timerInterval;
+    let playCount = 0; // Count how many times the player has played
+    let playerName = ''; // Store player name
+
+    function getRandomColor() {
+        const colors = ["red", "blue", "green", "yellow", "purple", "orange"];
+        return colors[Math.floor(Math.random() * colors.length)];
+    }
+
+    function getRandomBackgroundColor() {
+        const backgroundColors = ["#ffcccb", "#add8e6", "#90ee90", "#ffebcd", "#f0e68c", "#d8bfd8"];
+        return backgroundColors[Math.floor(Math.random() * backgroundColors.length)];
+    }
+
+    function updateInstruction() {
+        currentColor = getRandomColor();
+        instructionsElement.textContent = currentColor.charAt(0).toUpperCase() + currentColor.slice(1);
+        
+        // Change the color of the instruction text to a different color
+        let instructionColor;
+        do {
+            instructionColor = getRandomColor();
+        } while (instructionColor === currentColor); // Ensure instruction color is different
+
+        instructionsElement.style.color = instructionColor;
+
+        timeLeft = 2000; // Reset time to 2 seconds
+        timerElement.textContent = (timeLeft / 1000).toFixed(2); // Display in seconds with two decimal places
+        startTimer();
+        shuffleBalls();
+    }
+
+    function startTimer() {
+        clearInterval(timerInterval);
+        timerInterval = setInterval(() => {
+            timeLeft -= 100; // Decrease time by 100ms
+            timerElement.textContent = (timeLeft / 1000).toFixed(2); // Update timer display in seconds with two decimal places
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                alert(`Time's up! Your score: ${score}`);
+                checkHighScore(); // Check if the current score is a new high score
+                uploadScoreToLeaderboard(); // Automatically upload the score to the leaderboard
+                resetGame();
+            }
+        }, 100);
+    }
+
+    function checkHighScore() {
+        if (score > highScore) {
+            highScore = score; // Update high score if current score is greater
+            highScoreElement.textContent = "High Score: " + highScore; // Update high score display
+            alert(`New High Score: ${highScore}!`);
+        }
+    }
+
+    function shuffleBalls() {
+        const colors = ["red", "blue", "green", "yellow", "purple", "orange"];
+        const shuffledColors = colors.sort(() => Math.random() - 0.5); // Shuffle colors
+
+        balls.forEach((ball, index) => {
+            ball.style.backgroundColor = shuffledColors[index]; // Assign unique color to each ball
+            ball.style.borderRadius = Math.random() > 0.5 ? "50%" : "0"; // Change to square or circle
+        });
+    }
+
+    function handleBallClick(event) {
+        const clickedColor = event.target.style.backgroundColor;
+        document.body.style.backgroundColor = getRandomBackgroundColor(); // Change background color
+        if (clickedColor === currentColor) {
+            score++;
+            scoreElement.textContent = "Score: " + score;
+            updateInstruction();
+        } else {
+            alert(`Game Over! Your final score: ${score}`);
+            checkHighScore(); // Check if the current score is a new high score
+            uploadScoreToLeaderboard(); // Automatically upload the score to the leaderboard
+            resetGame();
+        }
+    }
+
+    function resetGame() {
+        score = 0;
+        scoreElement.textContent = "Score: 0";
+        clearInterval(timerInterval);
+        updateInstruction();
+    }
+
+    function uploadScoreToLeaderboard() {
+        if (playerName) {
+            const leaderboard = JSON.parse(localStorage.getItem("leaderboard")) || [];
+            leaderboard.push({ name: playerName, score }); // Add current score to leaderboard
+            leaderboard.sort((a, b) => b.score - a.score); // Sort by score descending
+            localStorage.setItem("leaderboard", JSON.stringify(leaderboard)); // Save updated leaderboard to local storage
+            displayLeaderboard(); // Automatically update the leaderboard after uploading the score
+        }
+    }
+
+    function displayLeaderboard() {
+        const leaderboard = JSON.parse(localStorage.getItem("leaderboard")) || [];
+        leaderboardElement.innerHTML = ""; // Clear current leaderboard display
+        leaderboard.forEach(entry => {
+            const entryElement = document.createElement("div");
+            entryElement.textContent = `${entry.name}: ${entry.score}`;
+            leaderboardElement.appendChild(entryElement);
+        });
+    }
+
+    balls.forEach(ball => {
+        ball.addEventListener("click", handleBallClick);
+    });
+
+    restartButton.addEventListener("click", resetGame);
+
+    const startGameButton = document.getElementById("startGameButton");
+    startGameButton.addEventListener("click", () => {
+        playerName = playerNameInput.value.trim(); // Store player name
+        if (playerName) {
+            if (playCount < 3) { // Check if the player has less than 3 chances
+                playCount++; // Increment play count
+                nameEntry.style.display = "none"; // Hide name entry
+                instructions.style.display = "block"; // Show instructions
+                timer.style.display = "block"; // Show timer
+                ballsContainer.style.display = "flex"; // Show balls
+                scoreElement.style.display = "block"; // Show score
+                highScoreElement.style.display = "block"; // Show high score
+                resetGame(); // Start the game
+            } else {
+                alert("You have used all your chances to play!");
+            }
+        } else {
+            alert("Please enter your name to start the game.");
+        }
+    });
+
+    // Reset leaderboard functionality
+    resetLeaderboardButton.addEventListener("click", () => {
+        if (confirm("Are you sure you want to reset the leaderboard? This action cannot be undone.")) {
+            localStorage.removeItem("leaderboard"); // Clear leaderboard from local storage
+            displayLeaderboard(); // Refresh leaderboard display
+            alert("Leaderboard has been reset.");
+        }
+    });
+
+    // Start the game
+    displayLeaderboard(); // Display leaderboard on load
+</script>
+
+</body>
+</html>
